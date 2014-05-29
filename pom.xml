@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>eu.ubitech.fistar</groupId>
+  <artifactId>ejbcarestproxy-parent</artifactId>
+  <packaging>pom</packaging>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>EJBCARestProxyParent</name>
+  <description>EJBCARestProxy Modules</description>
+  
+  <modules>   
+	<module>EJBCARestProxyClient</module>
+    <module>EJBCARestProxy</module>
+  </modules>
+                        
+   <properties>
+        <project.source.charset>UTF-8</project.source.charset>
+        <project.source.encoding>UTF-8</project.source.encoding>
+        <java.version.source>1.7</java.version.source>
+        <java.version.target>1.7</java.version.target>
+    </properties>        
+    
+    <build>	        
+	<plugins>	  
+
+	  
+            <!-- Test plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.17</version>
+                <configuration>
+                    <includes>
+                        <include>**/*Test.java</include>
+                        <include>**/Test*.java</include>
+                    </includes>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+    
+    
+  <repositories>
+        <repository>
+	    <id>MavenCentral</id>
+	    <name>Maven repository</name>
+	    <url>http://repo1.maven.org/maven2</url>
+	    <releases>
+		<enabled>true</enabled>
+	    </releases>
+	    <snapshots>
+		<enabled>false</enabled>
+	    </snapshots>
+	</repository>  
+	<repository>
+	    <id>Jboss repository</id>
+	    <url>http://repository.jboss.org/nexus/content/repositories/releases</url>
+	    <releases>
+	    <enabled>true</enabled>
+	    </releases>
+	</repository>
+
+  </repositories> 
+        
+</project>
