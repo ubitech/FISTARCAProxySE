@@ -5,7 +5,6 @@
  */
 package eu.ubitech.fistar.ejbca.proxy.client;
 
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -99,22 +98,6 @@ public enum EjbcaWSClient {
                 System.setProperty("javax.net.ssl.keyStorePassword", keystorePassword);
             }
 
-            //Set proper certificate format 
-          /*  if (keyStorePath.endsWith(".p12")) {
-             System.setProperty("javax.net.ssl.keyStoreType", "pkcs12");
-             }
-             //Only for .p12 certificates
-             if (trustStorePath == null) {
-             System.out.println("\n\n\n WTF?????? \n\n\n\n");
-             if (keyStorePath.endsWith(".p12")) {
-             final Provider tlsProvider = new TLSProvider();
-             Security.addProvider(tlsProvider);
-             Security.setProperty("ssl.TrustManagerFactory.algorithm", "AcceptAll");
-             } else {
-             System.setProperty("javax.net.ssl.trustStore", keyStorePath);
-             }
-             }
-             */
             tmpURL = new URL(props.getProperty("ejbcaws.url", "https://localhost:8443/ejbca/ejbcaws/ejbcaws") + "?wsdl");
             Security.setProperty("ssl.KeyManagerFactory.algorithm", "NewSunX509");
         } catch (Exception e) {
@@ -122,32 +105,6 @@ public enum EjbcaWSClient {
         }
         this.exception = tmpException;
         this.webServiceURL = tmpURL;
-    }
-
-    private class PasswordHandler implements CallbackHandler {
-
-        private char password[];
-
-        PasswordHandler(String _password) {
-            this.password = _password.toCharArray();
-        }
-        /* (non-Javadoc)
-         * @see javax.security.auth.callback.CallbackHandler#handle(javax.security.auth.callback.Callback[])
-         */
-
-        public void handle(Callback[] callbacks) throws IOException, UnsupportedCallbackException {
-            for (int i = 0; i < callbacks.length; i++) {
-                try {
-                    ((PasswordCallback) callbacks[i]).setPassword(this.password);
-                } catch (Throwable t) {
-                    System.out.println("callback class: " + callbacks[i].getClass().getCanonicalName());
-                }
-            }
-        }
-
-        void clean() {
-            this.password = null;
-        }
     }
 
     private void checkIfFileExists(String fileName) throws Exception {
@@ -201,19 +158,12 @@ public enum EjbcaWSClient {
         return this.ejbcaraws;
     }
 
-    public PrintStream getPrintStream() {
-        return System.out;
-    }
-
-    public int getRevokeReason(String reason) throws Exception {
+      public int getRevokeReason(String reason) throws Exception {
         for (int i = 0; i < REASON_TEXTS.length; i++) {
             if (REASON_TEXTS[i].equalsIgnoreCase(reason)) {
                 return REASON_VALUES[i];
             }
         }
-        getPrintStream().println("Error : Unsupported reason " + reason);
-        usage();
-        System.exit(-1); // NOPMD, this is not a JEE app
         return 0;
     }
 
@@ -223,23 +173,7 @@ public enum EjbcaWSClient {
                 return REASON_TEXTS[i];
             }
         }
-        getPrintStream().println("Error : Unsupported reason " + reason);
-        usage();
-        System.exit(-1); // NOPMD, this is not a JEE app
         return null;
     }
 
-    /**
-     * Print usage information.
-     */
-    private void usage() {
-        return;
-    }
-
-    public void deactivate() {
-    }
-
-    public boolean isActive() {
-        return true;
-    }
 }

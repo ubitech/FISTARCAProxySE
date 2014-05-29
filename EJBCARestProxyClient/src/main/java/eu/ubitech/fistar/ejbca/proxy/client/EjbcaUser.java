@@ -7,7 +7,6 @@ package eu.ubitech.fistar.ejbca.proxy.client;
 
 import java.util.HashMap;
 import java.util.Map;
-import org.cesecore.certificates.endentity.EndEntityConstants;
 import org.ejbca.core.protocol.ws.client.gen.UserDataVOWS;
 
 /**
@@ -52,13 +51,13 @@ public final class EjbcaUser {
     public void setDefaultValues() {
         setEntityArgument(Arguments.ISSUERALIAS, "NONE");
         setEntityArgument(Arguments.SUBJECTALTNAME, "NULL");
-        setEntityArgument(Arguments.HARDTOKENSN, "NONE");
+        setEntityArgument(Arguments.HARDTOKENSN, "NULL");
         setEntityArgument(Arguments.ENCODING, "PEM");
         setEntityArgument(Arguments.OUTPUTPATH, "");
         setEntityArgument(Arguments.STATUS, Integer.toString(UserDataVOWS.STATUS_NEW));
-        //setEntityArgument(Arguments.CLEARPWD, "TRUE");
+        setEntityArgument(Arguments.CLEARPWD, "FALSE");
         setEntityArgument(Arguments.EMAIL, "NULL");
-        setEntityArgument(Arguments.TOKEN,UserDataVOWS.TOKEN_TYPE_JKS); // "USERGENERATED" , "P12" ,  "JKS" , "PEM"
+        setEntityArgument(Arguments.TOKEN,UserDataVOWS.TOKEN_TYPE_JKS); 
     }
 
     public void setEntityArgument(Enum key, String value) {
