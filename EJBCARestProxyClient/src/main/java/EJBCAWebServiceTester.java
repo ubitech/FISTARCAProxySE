@@ -1,10 +1,26 @@
 
 import eu.ubitech.fistar.ejbca.proxy.client.EjbcaUser;
 import eu.ubitech.fistar.ejbca.proxy.client.ServiceClientImpl;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.security.cert.CertificateException;
+import java.security.cert.X509CRL;
+import java.security.cert.X509Certificate;
+import java.util.List;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.ejbca.core.protocol.ws.client.gen.Certificate;
+import org.ejbca.core.protocol.ws.client.gen.CertificateResponse;
+import org.ejbca.core.protocol.ws.client.gen.KeyStore;
 import org.ejbca.core.protocol.ws.client.gen.RevokeStatus;
+import org.ejbca.core.protocol.ws.client.gen.UserDataVOWS;
+import org.ejbca.core.protocol.ws.client.gen.UserMatch;
+import org.ejbca.core.protocol.ws.common.CertificateHelper;
 import org.ejbca.ui.cli.ErrorAdminCommandException;
 import org.ejbca.ui.cli.IllegalAdminCommandException;
 
@@ -23,25 +39,87 @@ public class EJBCAWebServiceTester {
 
     public static void main(String[] args) {
         if (invoke()) {
-           /* System.out.println("EJBCA is running and invocation was success....");
-            System.out.println("Test1: CheckRevokationStatus");
-            testCheckRevokationStatus();
-            System.out.println("Test2: AddNewUser");
-            testAddNewUser();
-            System.out.println("Test3: RevokeUserCert");
-            testRevokeUserCert();*/
-            System.out.println("Test4: GetIssuedCert");
-            testGetIssuedCert();
+            //System.out.println("EJBCA is running and invocation was success....");
+            //System.out.println("Test1: CheckRevokationStatus");
+            //testCheckRevokationStatus();
+            //System.out.println("Test2: AddNewUser");
+            //testAddNewUser();
+            /*System.out.println("Test3: RevokeUserCert");
+             testRevokeUserCert();*/
+            // System.out.println("Test4: GetIssuedCert");
+            //testGetIssuedCert();
+            //System.out.println("Test5: CreateCRL");
+            //testCreateCRL();
+            //System.out.println("Test6: GetLatestCRL");
+            //testGetLatestCRL();
+            /*System.out.println("Test7: FindUser");
+             testFindUser();
+             System.out.println("Test8: GetAvailableCAs");
+             testGetAvailableCAs();
+             System.out.println("Test9: GetAuthorizedEndEntityProfiles");
+             testGetAuthorizedEndEntityProfiles();
+             System.out.println("Test10: GetAvailableCertificateProfiles");
+             testGetAvailableCertificateProfiles();*/
 
+            testCrmfRequest();
         }
     }
-    
-        private static void testGetIssuedCert() {
-        Certificate cert = EJBCAWSClient.getCertificate("7135AB39DEDEF01F","CN=CIEC Sign Gold CA");
-        EJBCAWSClient.storeCertificate(cert, "der", "/home/promitheas/Downloads", "mycert");
+
+    private static void testCrmfRequest() {
+        try {
+            StringBuilder sb = new StringBuilder();
+            List<String> list = Files.readAllLines(Paths.get("/home/promitheas/Downloads/tmpcert/csrfilename.csr"), Charset.forName("UTF-8"));
+            for (String s : list) {
+                sb.append(s.concat("\n"));
+            }
+            System.out.println(sb.toString());
+            CertificateResponse certificateResponse = EJBCAWSClient.crmfRequest("test", "test", sb.toString(), null, CertificateHelper.RESPONSETYPE_CERTIFICATE);
+
+            X509Certificate cert = certificateResponse.getCertificate();
+
+            EJBCAWSClient.writeTOdisk(EJBCAWSClient.getfilepath("/home/promitheas/Downloads", "mycert"), certificateResponse.getData());
+
+            //EJBCAWSClient.storeX509Certificate(cert, "/home/promitheas/Downloads", "mycert");
+        } catch (IOException ex) {
+            Logger.getLogger(EJBCAWebServiceTester.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (CertificateException ex) {
+            Logger.getLogger(EJBCAWebServiceTester.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
     }
-    
+
+    private static void testGetAvailableCertificateProfiles() {
+        EJBCAWSClient.getAvailableCertificateProfiles(1806334636);
+    }
+
+    private static void testGetAuthorizedEndEntityProfiles() {
+        EJBCAWSClient.getAuthorizedEndEntityProfiles();
+    }
+
+    private static void testGetAvailableCAs() {
+        EJBCAWSClient.getAvailableCAs();
+
+    }
+
+    private static void testFindUser() {
+        UserMatch usermatch = new UserMatch(UserMatch.MATCH_WITH_CA, UserMatch.MATCH_TYPE_EQUALS, "CIEC Sign Gold CA");
+        EJBCAWSClient.findUser(usermatch);
+    }
+
+    private static void testGetLatestCRL() {
+        X509CRL crl = EJBCAWSClient.getLatestCRL("CIEC Sign Gold CA", false);
+        EJBCAWSClient.storeCRL(crl, "/home/promitheas/Downloads", "mycrl");
+    }
+
+    private static void testCreateCRL() {
+        EJBCAWSClient.createCRL("CIEC Sign Gold CA");
+    }
+
+    private static void testGetIssuedCert() {
+        Certificate cert = EJBCAWSClient.getCertificate("4CA55328EFB349B7", "CN=CIEC Sign Gold CA");
+        EJBCAWSClient.storeCertificate(cert, "binary", "/home/promitheas/Downloads", "mycert2");
+
+    }
 
     private static void testRevokeUserCert() {
         EJBCAWSClient.revokeUserCert("CN=CIEC Sign Gold CA", "5FD08B3E1E17EE23", RevokeStatus.REVOKATION_REASON_SUPERSEDED);
@@ -61,10 +139,12 @@ public class EJBCAWebServiceTester {
         ejbcaUser.setEntityArgument(EjbcaUser.Arguments.ENDENTITYPROFILE, "CIEC officer");
         ejbcaUser.setEntityArgument(EjbcaUser.Arguments.CERTIFICATEPROFILE, "CIEC user");
         ejbcaUser.setEntityArgument(EjbcaUser.Arguments.EMAIL, "test@testemail.com");
+        ejbcaUser.setEntityArgument(EjbcaUser.Arguments.TOKEN, UserDataVOWS.TOKEN_TYPE_P12);
 
         try {
             try {
-                EJBCAWSClient.editUser(ejbcaUser);
+                KeyStore keystore = EJBCAWSClient.editUser(ejbcaUser);
+                EJBCAWSClient.storeKeystore(keystore, "P12", "binary", "/home/promitheas/Downloads", "mykeystore");
             } catch (IllegalAdminCommandException ex) {
                 Logger.getLogger(EJBCAWebServiceTester.class.getName()).log(Level.SEVERE, null, ex);
             }
