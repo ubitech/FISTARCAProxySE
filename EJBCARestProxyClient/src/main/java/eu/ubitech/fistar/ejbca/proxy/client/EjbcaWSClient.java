@@ -9,10 +9,17 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
+import java.security.KeyStore;
 import java.security.Security;
 import java.util.Properties;
 import java.util.logging.Logger;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.TrustManagerFactory;
 import javax.xml.namespace.QName;
 import org.cesecore.util.CryptoProviderTools;
 import org.ejbca.core.protocol.ws.client.gen.EjbcaWS;
@@ -62,14 +69,20 @@ public enum EjbcaWSClient {
         REVOKATION_REASON_REMOVEFROMCRL, REVOKATION_REASON_PRIVILEGESWITHDRAWN,
         REVOKATION_REASON_AACOMPROMISE};
 
-    EjbcaWSClient() {
+    EjbcaWSClient() { //Thread.currentThread().getContextClassLoader().getResourceAsStream("./KS/keystore.jks");
 
+        TrustManagerFactory trustManagerFactory = null;
+        KeyManagerFactory keyManagerFactory = null;
+        KeyStore trustStore = null;
+        KeyStore identitystore = null;
         final Properties props = new Properties();
         URL tmpURL = null;
         Exception tmpException = null;
         try {
             try {
-                props.load(new FileInputStream("ejbcawsra.properties"));
+                //props.load(new FileInputStream("ejbcawsra.properties"));
+                props.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("ejbcawsra.properties"));
+
             } catch (FileNotFoundException e) {
                 Logger.getLogger(EjbcaWSClient.class.getName()).severe(e.getMessage());
             }
@@ -80,8 +93,16 @@ public enum EjbcaWSClient {
             final String truststorePassword = props.getProperty("truststore.password");
             if (trustStorePath != null) {
                 checkIfFileExists(trustStorePath);
-                System.setProperty("javax.net.ssl.trustStore", trustStorePath);
-                System.setProperty("javax.net.ssl.trustStorePassword", truststorePassword);
+
+                trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
+                trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+                InputStream truststoreStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(trustStorePath);
+                trustStore.load(truststoreStream, truststorePassword.toCharArray());
+                trustManagerFactory.init(trustStore);
+
+                /*Used only to pass SSL parameter from filesytem*/
+                //System.setProperty("javax.net.ssl.trustStore", trustStorePath);
+                //System.setProperty("javax.net.ssl.trustStorePassword", truststorePassword);
             }
 
             //Set Keystore file path and certificate password
@@ -89,12 +110,23 @@ public enum EjbcaWSClient {
             final String keystorePassword = props.getProperty("keystore.password");
             if (keyStorePath != null) {
                 checkIfFileExists(keyStorePath);
-                System.setProperty("javax.net.ssl.keyStore", keyStorePath);
-                System.setProperty("javax.net.ssl.keyStorePassword", keystorePassword);
+                identitystore = KeyStore.getInstance(KeyStore.getDefaultType());
+                keyManagerFactory = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
+                InputStream keystoreStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(keyStorePath);
+                identitystore.load(keystoreStream, keystorePassword.toCharArray());
+                keyManagerFactory.init(identitystore, keystorePassword.toCharArray());
+
+                /*Used only to pass SSL parameter from filesytem*/
+                //System.setProperty("javax.net.ssl.keyStore", keyStorePath);
+                //System.setProperty("javax.net.ssl.keyStorePassword", keystorePassword);
             }
 
+            SSLContext sc = SSLContext.getInstance("SSL");
+            sc.init(keyManagerFactory.getKeyManagers(), trustManagerFactory.getTrustManagers(), null);
+            SSLContext.setDefault(sc); //Alternative Use: HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+         
             tmpURL = new URL(props.getProperty("ejbcaws.url", "https://localhost:8443/ejbca/ejbcaws/ejbcaws") + "?wsdl");
-            Security.setProperty("ssl.KeyManagerFactory.algorithm", "NewSunX509");
+            //Security.setProperty("ssl.KeyManagerFactory.algorithm", "NewSunX509");
         } catch (Exception e) {
             tmpException = e;
         }
@@ -106,8 +138,10 @@ public enum EjbcaWSClient {
         if (fileName.equals("NONE")) {
             return;
         }
-        final File f = new File(fileName);
-        if (!f.exists()) {
+        // final File f = new File(fileName);
+        // if (!f.exists()) {
+
+        if (Thread.currentThread().getContextClassLoader().getResourceAsStream(fileName) == null) {
             throw new Exception("File '" + fileName + "' does not exist");
         }
     }
@@ -153,7 +187,7 @@ public enum EjbcaWSClient {
         return this.ejbcaraws;
     }
 
-      public int getRevokeReason(String reason) throws Exception {
+    public int getRevokeReason(String reason) throws Exception {
         for (int i = 0; i < REASON_TEXTS.length; i++) {
             if (REASON_TEXTS[i].equalsIgnoreCase(reason)) {
                 return REASON_VALUES[i];

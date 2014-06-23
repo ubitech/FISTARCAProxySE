@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package eu.ubitech.fistar.ejbcarestproxy.service;
+package eu.ubitech.fistar.ejbcarestproxy.services;
 
 import java.util.ArrayList;
 import java.util.logging.Logger;

@@ -60,9 +60,9 @@ import org.ejbca.util.query.IllegalQueryException;
  * @author Chris Paraskeva - www.ubitech.eu
  *
  */
-public class ServiceClientImpl {
+public class EjbcaWSClientImpl {
 
-    private final Logger logger = Logger.getLogger(ServiceClientImpl.class.getName());
+    private final Logger logger = Logger.getLogger(EjbcaWSClientImpl.class.getName());
 
     private enum Encode {
 
@@ -207,11 +207,11 @@ public class ServiceClientImpl {
                 wslogger.append("Certificate with SerialNumber: " + certSNinHex + " and IssuerDN: " + issuerDN + " was fetched!");
             }
         } catch (AuthorizationDeniedException_Exception ex) {
-            Logger.getLogger(ServiceClientImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EjbcaWSClientImpl.class.getName()).log(Level.SEVERE, null, ex);
         } catch (CADoesntExistsException_Exception ex) {
-            Logger.getLogger(ServiceClientImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EjbcaWSClientImpl.class.getName()).log(Level.SEVERE, null, ex);
         } catch (EjbcaException_Exception ex) {
-            Logger.getLogger(ServiceClientImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EjbcaWSClientImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         wslogger.showLogs(this.logger);
@@ -251,7 +251,7 @@ public class ServiceClientImpl {
                 }
             }
         } catch (Exception ex) {
-            Logger.getLogger(ServiceClientImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EjbcaWSClientImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         wslogger.showLogs(this.logger);
@@ -308,19 +308,19 @@ public class ServiceClientImpl {
             try {
                 throw new ErrorAdminCommandException(e);
             } catch (ErrorAdminCommandException ex) {
-                Logger.getLogger(ServiceClientImpl.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(EjbcaWSClientImpl.class.getName()).log(Level.SEVERE, null, ex);
             }
         } catch (EjbcaException_Exception e) {
             try {
                 throw new ErrorAdminCommandException(e);
             } catch (ErrorAdminCommandException ex) {
-                Logger.getLogger(ServiceClientImpl.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(EjbcaWSClientImpl.class.getName()).log(Level.SEVERE, null, ex);
             }
         } catch (NotFoundException_Exception e) {
             try {
                 throw new ErrorAdminCommandException(e);
             } catch (ErrorAdminCommandException ex) {
-                Logger.getLogger(ServiceClientImpl.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(EjbcaWSClientImpl.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
 
@@ -363,17 +363,17 @@ public class ServiceClientImpl {
             getEjbcaRAWS().createCRL(caname);
             logger.log(Level.INFO, "CRL for CA: {0} was created successfuly!", caname);
         } catch (ApprovalException_Exception ex) {
-            Logger.getLogger(ServiceClientImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EjbcaWSClientImpl.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ApprovalRequestExpiredException_Exception ex) {
-            Logger.getLogger(ServiceClientImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EjbcaWSClientImpl.class.getName()).log(Level.SEVERE, null, ex);
         } catch (CADoesntExistsException_Exception ex) {
-            Logger.getLogger(ServiceClientImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EjbcaWSClientImpl.class.getName()).log(Level.SEVERE, null, ex);
         } catch (CAOfflineException_Exception ex) {
-            Logger.getLogger(ServiceClientImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EjbcaWSClientImpl.class.getName()).log(Level.SEVERE, null, ex);
         } catch (CryptoTokenOfflineException_Exception ex) {
-            Logger.getLogger(ServiceClientImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EjbcaWSClientImpl.class.getName()).log(Level.SEVERE, null, ex);
         } catch (EjbcaException_Exception ex) {
-            Logger.getLogger(ServiceClientImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EjbcaWSClientImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -403,13 +403,13 @@ public class ServiceClientImpl {
             crl = (X509CRL) cf.generateCRL(new ByteArrayInputStream(crlraw));
             logger.log(Level.INFO, "Success retrieve CRL list issued by CA: {0}", caname);
         } catch (CADoesntExistsException_Exception ex) {
-            Logger.getLogger(ServiceClientImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EjbcaWSClientImpl.class.getName()).log(Level.SEVERE, null, ex);
         } catch (EjbcaException_Exception ex) {
-            Logger.getLogger(ServiceClientImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EjbcaWSClientImpl.class.getName()).log(Level.SEVERE, null, ex);
         } catch (CertificateException ex) {
-            Logger.getLogger(ServiceClientImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EjbcaWSClientImpl.class.getName()).log(Level.SEVERE, null, ex);
         } catch (CRLException ex) {
-            Logger.getLogger(ServiceClientImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EjbcaWSClientImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
         return crl;
     }
@@ -437,13 +437,13 @@ public class ServiceClientImpl {
             logger.log(Level.INFO, "Total {0} Users found matching the given criteria!", users.size());
 
         } catch (AuthorizationDeniedException_Exception ex) {
-            Logger.getLogger(ServiceClientImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EjbcaWSClientImpl.class.getName()).log(Level.SEVERE, null, ex);
         } catch (EjbcaException_Exception ex) {
-            Logger.getLogger(ServiceClientImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EjbcaWSClientImpl.class.getName()).log(Level.SEVERE, null, ex);
         } catch (EndEntityProfileNotFoundException_Exception ex) {
-            Logger.getLogger(ServiceClientImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EjbcaWSClientImpl.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IllegalQueryException_Exception ex) {
-            Logger.getLogger(ServiceClientImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EjbcaWSClientImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
         return users;
     }
@@ -465,9 +465,9 @@ public class ServiceClientImpl {
             availableCAs = getEjbcaRAWS().getAvailableCAs();
             logger.log(Level.INFO, "Total {0} CAs found in EJBCA database!", availableCAs.size());
         } catch (AuthorizationDeniedException_Exception ex) {
-            Logger.getLogger(ServiceClientImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EjbcaWSClientImpl.class.getName()).log(Level.SEVERE, null, ex);
         } catch (EjbcaException_Exception ex) {
-            Logger.getLogger(ServiceClientImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EjbcaWSClientImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
         return availableCAs;
     }
@@ -487,9 +487,9 @@ public class ServiceClientImpl {
             endentityProfiles = getEjbcaRAWS().getAuthorizedEndEntityProfiles();
             logger.log(Level.INFO, "Total {0} Authorized End-Entity Profiles found in EJBCA database!", endentityProfiles.size());
         } catch (AuthorizationDeniedException_Exception ex) {
-            Logger.getLogger(ServiceClientImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EjbcaWSClientImpl.class.getName()).log(Level.SEVERE, null, ex);
         } catch (EjbcaException_Exception ex) {
-            Logger.getLogger(ServiceClientImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EjbcaWSClientImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         return endentityProfiles;
@@ -512,9 +512,9 @@ public class ServiceClientImpl {
             certificateProfiles = getEjbcaRAWS().getAvailableCertificateProfiles(entityProfileId);
             logger.log(Level.INFO, "Total {0} available certificate profiles for end-entity profile with ID: {1}", new Object[]{certificateProfiles.size(), String.valueOf(entityProfileId)});
         } catch (AuthorizationDeniedException_Exception ex) {
-            Logger.getLogger(ServiceClientImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EjbcaWSClientImpl.class.getName()).log(Level.SEVERE, null, ex);
         } catch (EjbcaException_Exception ex) {
-            Logger.getLogger(ServiceClientImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EjbcaWSClientImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
         return certificateProfiles;
     }
@@ -525,15 +525,15 @@ public class ServiceClientImpl {
             //getEjbcaRAWS().crmfRequest(username, password, crmf, hardToeknSN, responseType);
             certificateResponse = getEjbcaRAWS().pkcs10Request(username, password, crmf, hardToeknSN, responseType);
         } catch (AuthorizationDeniedException_Exception ex) {
-            Logger.getLogger(ServiceClientImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EjbcaWSClientImpl.class.getName()).log(Level.SEVERE, null, ex);
         } catch (CADoesntExistsException_Exception ex) {
-            Logger.getLogger(ServiceClientImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EjbcaWSClientImpl.class.getName()).log(Level.SEVERE, null, ex);
         } catch (CesecoreException_Exception ex) {
-            Logger.getLogger(ServiceClientImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EjbcaWSClientImpl.class.getName()).log(Level.SEVERE, null, ex);
         } catch (EjbcaException_Exception ex) {
-            Logger.getLogger(ServiceClientImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EjbcaWSClientImpl.class.getName()).log(Level.SEVERE, null, ex);
         } catch (NotFoundException_Exception ex) {
-            Logger.getLogger(ServiceClientImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EjbcaWSClientImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
         return certificateResponse;
     }
@@ -590,7 +590,7 @@ public class ServiceClientImpl {
                 try {
                     isStoreSuccess = this.writeTOdisk(getfilepath(pathname, filename + ".crl"), crl.getEncoded());
                 } catch (CRLException ex) {
-                    Logger.getLogger(ServiceClientImpl.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(EjbcaWSClientImpl.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }
@@ -612,7 +612,7 @@ public class ServiceClientImpl {
                 try {
                     isStoreSuccess = this.writeTOdisk(getfilepath(pathname, filename + ".crl"), cert.getEncoded());
                 } catch (CertificateException ex) {
-                    Logger.getLogger(ServiceClientImpl.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(EjbcaWSClientImpl.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }
@@ -744,12 +744,12 @@ public class ServiceClientImpl {
     }
 
     //Get an EjbcaWS Object Instance
-    public EjbcaWS getEjbcaRAWS() {
+    public static EjbcaWS getEjbcaRAWS() {
 
         try {
             return EjbcaWSClient.INSTANCE.getEjbcaRAWS();
         } catch (Exception ex) {
-            Logger.getLogger(ServiceClientImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EjbcaWSClientImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
@@ -774,14 +774,14 @@ public class ServiceClientImpl {
             fos.close();
             isWriteSuccess = true;
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(ServiceClientImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EjbcaWSClientImpl.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(ServiceClientImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EjbcaWSClientImpl.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
                 fos.close();
             } catch (IOException ex) {
-                Logger.getLogger(ServiceClientImpl.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(EjbcaWSClientImpl.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return isWriteSuccess;

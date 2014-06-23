@@ -15,14 +15,18 @@ public enum ServerFactory {
 
     INSTANCE;
 
+    private int DEFAULT_PORT = 8888;
     private Server jettyServer = null;
 
-    public Server getJettyServer() {
+    public Server getJettyServer(int port) {
         if (jettyServer == null) {
-            this.jettyServer = new Server(8888);
+            this.jettyServer = new Server(port);
         }
         return this.jettyServer;
+    }
 
+    public Server getJettyServer() {
+        return this.getJettyServer(DEFAULT_PORT);
     }
 
 }

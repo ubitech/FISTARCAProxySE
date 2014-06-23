@@ -14,7 +14,7 @@
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="sun.os.patch.level" value="unknown"/>
     <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
-    <property name="user.dir" value="/home/promitheas/IDEs_Projects/NetBeansProjects/EJBCARestProxyModule"/>
+    <property name="user.dir" value="/home/promitheas/IDEs_Projects/NetBeansProjects/EJBCARestProxyModule/EJBCARestProxy"/>
     <property name="java.runtime.version" value="1.7.0_51-b13"/>
     <property name="java.awt.graphicsenv" value="sun.awt.X11GraphicsEnvironment"/>
     <property name="java.endorsed.dirs" value="/opt/JAVA/jdk1.7.0_51/jre/lib/endorsed"/>

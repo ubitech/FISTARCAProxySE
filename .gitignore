@@ -1,0 +1,4 @@
+#Ignore IDEs files
+target
+dist
+*.log

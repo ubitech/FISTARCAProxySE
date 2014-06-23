@@ -1,6 +1,6 @@
 
 import eu.ubitech.fistar.ejbca.proxy.client.EjbcaUser;
-import eu.ubitech.fistar.ejbca.proxy.client.ServiceClientImpl;
+import eu.ubitech.fistar.ejbca.proxy.client.EjbcaWSClientImpl;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -35,15 +35,16 @@ import org.ejbca.ui.cli.IllegalAdminCommandException;
  */
 public class EJBCAWebServiceTester {
 
-    private static ServiceClientImpl EJBCAWSClient = new ServiceClientImpl();
+    private static EjbcaWSClientImpl EJBCAWSClient = new EjbcaWSClientImpl();
 
     public static void main(String[] args) {
         if (invoke()) {
-            //System.out.println("EJBCA is running and invocation was success....");
-            //System.out.println("Test1: CheckRevokationStatus");
-            //testCheckRevokationStatus();
+            System.out.println("EJBCA is running and invocation was success....");
+            System.out.println("Test1: CheckRevokationStatus");
+            testCheckRevokationStatus();
             //System.out.println("Test2: AddNewUser");
             //testAddNewUser();
+            //testAddNewUser2();
             /*System.out.println("Test3: RevokeUserCert");
              testRevokeUserCert();*/
             // System.out.println("Test4: GetIssuedCert");
@@ -60,8 +61,7 @@ public class EJBCAWebServiceTester {
              testGetAuthorizedEndEntityProfiles();
              System.out.println("Test10: GetAvailableCertificateProfiles");
              testGetAvailableCertificateProfiles();*/
-
-            testCrmfRequest();
+             //testCrmfRequest();
         }
     }
 
@@ -135,7 +135,7 @@ public class EJBCAWebServiceTester {
         ejbcaUser.setEntityArgument(EjbcaUser.Arguments.USERNAME, "testEjbcaUser");
         ejbcaUser.setEntityArgument(EjbcaUser.Arguments.PASSWORD, "testPassword");
         ejbcaUser.setEntityArgument(EjbcaUser.Arguments.CA, "CIEC Sign Gold CA");
-        ejbcaUser.setEntityArgument(EjbcaUser.Arguments.SUBJECTDN, "CN=testa user2");
+        ejbcaUser.setEntityArgument(EjbcaUser.Arguments.SUBJECTDN, "CN=testa user3");
         ejbcaUser.setEntityArgument(EjbcaUser.Arguments.ENDENTITYPROFILE, "CIEC officer");
         ejbcaUser.setEntityArgument(EjbcaUser.Arguments.CERTIFICATEPROFILE, "CIEC user");
         ejbcaUser.setEntityArgument(EjbcaUser.Arguments.EMAIL, "test@testemail.com");
@@ -153,6 +153,50 @@ public class EJBCAWebServiceTester {
         }
 
     }
+    
+    private static void testAddNewUser2() {
+        String username="FR_AmblÃ©on RO";
+        String password = "Xola7Dat";
+        String dn="CN=AmblÃ©on RO1,OU=civil status,O=public sector,C=FR,UID=e9b7f567c3d34e6d822e";  //
+        String caname="CIEC Sign Gold CA";
+        String eeprofilename="CIEC officer";
+        String cerprofilename="CIEC user";
+        //------------
+        UserDataVOWS user1 = new UserDataVOWS();
+        user1.setUsername(username);
+        user1.setPassword(password);
+        user1.setSubjectDN(dn);
+        user1.setCaName(caname);
+        user1.setEmail("p.polydoras@yahoo.gr");
+        user1.setSubjectAltName(null);
+        user1.setEndEntityProfileName(eeprofilename);
+        user1.setCertificateProfileName(cerprofilename);
+        user1.setTokenType(UserDataVOWS.TOKEN_TYPE_P12);
+        user1.setKeyRecoverable(false);        
+        
+        //EjbcaUser ejbcaUser = new EjbcaUser();
+        //ejbcaUser.setEntityArgument(EjbcaUser.Arguments.USERNAME, "testEjbcaUser");
+        //ejbcaUser.setEntityArgument(EjbcaUser.Arguments.PASSWORD, "testPassword");
+        //ejbcaUser.setEntityArgument(EjbcaUser.Arguments.CA, "CIEC Sign Gold CA");
+        //ejbcaUser.setEntityArgument(EjbcaUser.Arguments.SUBJECTDN, "CN=testa user2");
+        //ejbcaUser.setEntityArgument(EjbcaUser.Arguments.ENDENTITYPROFILE, "CIEC officer");
+        //ejbcaUser.setEntityArgument(EjbcaUser.Arguments.CERTIFICATEPROFILE, "CIEC user");
+        //ejbcaUser.setEntityArgument(EjbcaUser.Arguments.EMAIL, "test@testemail.com");
+        //ejbcaUser.setEntityArgument(EjbcaUser.Arguments.TOKEN, UserDataVOWS.TOKEN_TYPE_P12);
+
+
+            try {
+                //KeyStore keystore = EJBCAWSClient.editUser(ejbcaUser);
+                //EJBCAWSClient.storeKeystore(keystore, "P12", "binary", "/home/promitheas/Downloads", "mykeystore");
+                //ServiceClientImpl.getEjbcaRAWS().editUser(user1);
+                List<Certificate> list= EjbcaWSClientImpl.getEjbcaRAWS().findCerts("test", true);
+                System.out.println("list.size: "+list.size());
+            } catch (Exception ex) {
+                Logger.getLogger(EJBCAWebServiceTester.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+    }    
+    
 
     static boolean invoke() {
         //1 - Retrieve the current version of EJBCA Instance
