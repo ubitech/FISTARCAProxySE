@@ -275,6 +275,8 @@ public class EjbcaWSClientImpl {
      * <a href="http://en.wikipedia.org/wiki/ISO8601">ISO 8601 string</a>. An
      * example: 2012-06-07T23:55:59+02:00
      */
+    
+    //TODO: Implement a return value solution
     public void revokeCertBackdated(String issuerDN, String certificateSN, int reason, String sDate) {
         EjbcaWSLogger wslogger = new EjbcaWSLogger();
         try {
@@ -335,6 +337,8 @@ public class EjbcaWSClientImpl {
      * @param certificateSN
      * @param reason
      */
+    
+    //TODO: Implement a return value solution
     public void revokeUserCert(String issuerDN, String certificateSN, int reason) {
         revokeCertBackdated(issuerDN, certificateSN, reason, null);
 

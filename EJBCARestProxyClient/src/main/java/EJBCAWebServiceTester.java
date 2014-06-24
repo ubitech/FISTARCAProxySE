@@ -40,28 +40,28 @@ public class EJBCAWebServiceTester {
     public static void main(String[] args) {
         if (invoke()) {
             System.out.println("EJBCA is running and invocation was success....");
-            System.out.println("Test1: CheckRevokationStatus");
-            testCheckRevokationStatus();
+            //System.out.println("Test1: CheckRevokationStatus");
+            //testCheckRevokationStatus();
             //System.out.println("Test2: AddNewUser");
             //testAddNewUser();
             //testAddNewUser2();
-            /*System.out.println("Test3: RevokeUserCert");
-             testRevokeUserCert();*/
-            // System.out.println("Test4: GetIssuedCert");
+            //System.out.println("Test3: RevokeUserCert");
+            //testRevokeUserCert();
+            //System.out.println("Test4: GetIssuedCert");
             //testGetIssuedCert();
             //System.out.println("Test5: CreateCRL");
             //testCreateCRL();
             //System.out.println("Test6: GetLatestCRL");
             //testGetLatestCRL();
-            /*System.out.println("Test7: FindUser");
-             testFindUser();
-             System.out.println("Test8: GetAvailableCAs");
-             testGetAvailableCAs();
-             System.out.println("Test9: GetAuthorizedEndEntityProfiles");
-             testGetAuthorizedEndEntityProfiles();
-             System.out.println("Test10: GetAvailableCertificateProfiles");
-             testGetAvailableCertificateProfiles();*/
-             //testCrmfRequest();
+            //System.out.println("Test7: FindUser");
+            //testFindUser();
+             //System.out.println("Test8: GetAvailableCAs");
+             //testGetAvailableCAs();
+             //System.out.println("Test9: GetAuthorizedEndEntityProfiles");
+             //testGetAuthorizedEndEntityProfiles();
+             //System.out.println("Test10: GetAvailableCertificateProfiles");
+             //testGetAvailableCertificateProfiles();
+             //testCrmfRequest(); //TODO: Add test!
         }
     }
 
