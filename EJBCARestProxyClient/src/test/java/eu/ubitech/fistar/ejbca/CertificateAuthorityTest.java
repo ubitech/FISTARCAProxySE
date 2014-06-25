@@ -4,9 +4,10 @@ import eu.ubitech.fistar.ejbca.proxy.client.EjbcaWSClientImpl;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
+import org.ejbca.core.protocol.ws.client.gen.NameAndId;
 
 /**
- * Unit test for simple App.
+ * Unit test for Certificate Authority SOAP operations.
  */
 public class CertificateAuthorityTest
         extends TestCase {
@@ -38,12 +39,14 @@ public class CertificateAuthorityTest
 
     /*Get the Certificate of the CA who currently issues all certificates (FISTAR EJBCA)*/
     public void testGetCACertificate() {
-        assertNotNull(EJBCAWSClient.getCertificate("4CA55328EFB349B7", "CN=CIEC Sign Gold CA"));
+        assertNotNull(EJBCAWSClient.getCertificate("53052C347027C9DA", "CN=ManagementCA,O=EJBCA Sample,C=SE"));
     }
 
     /*Get all available certificate profiles for a specific end-entities profiles*/
+    
+    //Entity Profile ID 916351690 corresponds to "FISTARUser"
     public void testGetAvailableCertificateProfiles() {
-        assertFalse(EJBCAWSClient.getAvailableCertificateProfiles(1806334636).isEmpty());
+        assertFalse(EJBCAWSClient.getAvailableCertificateProfiles(916351690).isEmpty());
     }
 
     /*Get all authorized end-entities profiles for the current issuing CA */

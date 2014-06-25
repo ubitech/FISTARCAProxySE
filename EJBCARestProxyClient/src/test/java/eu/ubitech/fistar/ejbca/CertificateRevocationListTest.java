@@ -1,21 +1,14 @@
 package eu.ubitech.fistar.ejbca;
 
-import eu.ubitech.fistar.ejbca.proxy.client.EjbcaUser;
 import eu.ubitech.fistar.ejbca.proxy.client.EjbcaWSClientImpl;
 import java.security.cert.X509CRL;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import static junit.framework.Assert.assertNotNull;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-import org.ejbca.core.protocol.ws.client.gen.KeyStore;
-import org.ejbca.core.protocol.ws.client.gen.UserDataVOWS;
-import org.ejbca.ui.cli.ErrorAdminCommandException;
-import org.ejbca.ui.cli.IllegalAdminCommandException;
 
 /**
- * Unit test for simple App.
+ * Unit test for Certificate Revocation List SOAP operations.
  */
 public class CertificateRevocationListTest
         extends TestCase {
@@ -43,11 +36,11 @@ public class CertificateRevocationListTest
      * certificate)
      */
     public void testCreateCRL() {
-        EJBCAWSClient.createCRL("CIEC Sign Gold CA");
+        EJBCAWSClient.createCRL("FISTARManagementCA");
     }
 
         public void testGetLatestCRL() {
-        X509CRL crl = EJBCAWSClient.getLatestCRL("CIEC Sign Gold CA", false);
+        X509CRL crl = EJBCAWSClient.getLatestCRL("FISTARManagementCA", false);
         assertNotNull(crl);
     }
 }

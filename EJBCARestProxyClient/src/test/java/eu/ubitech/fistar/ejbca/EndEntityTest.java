@@ -15,7 +15,7 @@ import org.ejbca.ui.cli.ErrorAdminCommandException;
 import org.ejbca.ui.cli.IllegalAdminCommandException;
 
 /**
- * Unit test for simple App.
+ * Unit test for End Entity SOAP operations.
  */
 public class EndEntityTest
         extends TestCase {
@@ -44,12 +44,12 @@ public class EndEntityTest
      */
     public void testAddEndEntity() {
         EjbcaUser ejbcaUser = new EjbcaUser();
-        ejbcaUser.setEntityArgument(EjbcaUser.Arguments.USERNAME, "testEjbcaUser");
+        ejbcaUser.setEntityArgument(EjbcaUser.Arguments.USERNAME, "testEjbcaUser2");
         ejbcaUser.setEntityArgument(EjbcaUser.Arguments.PASSWORD, "testPassword");
-        ejbcaUser.setEntityArgument(EjbcaUser.Arguments.CA, "CIEC Sign Gold CA");
-        ejbcaUser.setEntityArgument(EjbcaUser.Arguments.SUBJECTDN, "CN=testa user3");
-        ejbcaUser.setEntityArgument(EjbcaUser.Arguments.ENDENTITYPROFILE, "CIEC officer");
-        ejbcaUser.setEntityArgument(EjbcaUser.Arguments.CERTIFICATEPROFILE, "CIEC user");
+        ejbcaUser.setEntityArgument(EjbcaUser.Arguments.CA, "FISTARManagementCA");
+        ejbcaUser.setEntityArgument(EjbcaUser.Arguments.SUBJECTDN, "CN=test user2");
+        ejbcaUser.setEntityArgument(EjbcaUser.Arguments.ENDENTITYPROFILE, "FISTARUser");
+        ejbcaUser.setEntityArgument(EjbcaUser.Arguments.CERTIFICATEPROFILE, "ENDUSER");
         ejbcaUser.setEntityArgument(EjbcaUser.Arguments.EMAIL, "test@testemail.com");
         ejbcaUser.setEntityArgument(EjbcaUser.Arguments.TOKEN, UserDataVOWS.TOKEN_TYPE_P12);
 
@@ -66,12 +66,12 @@ public class EndEntityTest
     }
 
     public void testFindEndEntity() {
-        UserMatch usermatch = new UserMatch(UserMatch.MATCH_WITH_CA, UserMatch.MATCH_TYPE_EQUALS, "CIEC Sign Gold CA");
+        UserMatch usermatch = new UserMatch(UserMatch.MATCH_WITH_CA, UserMatch.MATCH_TYPE_EQUALS, "FISTARManagementCA");
         assert (EJBCAWSClient.findUser(usermatch).size() > 0);
     }
     
     public void testGetEndEntityCertificate(){
-        Certificate cert = EJBCAWSClient.getCertificate("4CA55328EFB349B7", "CN=CIEC Sign Gold CA");
+        Certificate cert = EJBCAWSClient.getCertificate("4AB7F56FEF983DF1", "CN=ManagementCA,O=EJBCA Sample,C=SE");
         assertNotNull(cert);
     }
 

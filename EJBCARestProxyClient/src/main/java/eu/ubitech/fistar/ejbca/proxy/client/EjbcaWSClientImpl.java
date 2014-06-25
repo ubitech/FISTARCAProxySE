@@ -170,6 +170,7 @@ public class EjbcaWSClientImpl {
         } catch (CADoesntExistsException_Exception e) {
             wslogger.append("No such CA: " + user.getEntityArgument(EjbcaUser.Arguments.CA));
         } catch (EjbcaException_Exception e) {
+            e.printStackTrace();
             wslogger.append("An unexpected exception occured to EJBCA...");
         } catch (NotFoundException_Exception e) {
             wslogger.append("No such command...");

@@ -1,14 +1,13 @@
 package eu.ubitech.fistar.ejbca;
 
 import eu.ubitech.fistar.ejbca.proxy.client.EjbcaWSClientImpl;
-import java.security.cert.X509CRL;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import org.ejbca.core.protocol.ws.client.gen.RevokeStatus;
 
 /**
- * Unit test for simple App.
+ * Unit test for Certificate Status SOAP operations.
  */
 public class CertificateStatusTest
         extends TestCase {
@@ -36,11 +35,11 @@ public class CertificateStatusTest
      * certificate)
      */
     public void testCheckCertificateStatus() {
-        assert (EJBCAWSClient.checkCertificateRevokeStatus("CN=CIEC Sign Gold CA", "5FD08B3E1E17EE23").getReason() == RevokeStatus.REVOKATION_REASON_CACOMPROMISE);
+        assert (EJBCAWSClient.checkCertificateRevokeStatus("CN=ManagementCA,O=EJBCA Sample,C=SE", "4AB7F56FEF983DF1").getReason() == RevokeStatus.REVOKATION_REASON_SUPERSEDED);
     }
 
     public void testRevokeUserCert() {
-        EJBCAWSClient.revokeUserCert("CN=CIEC Sign Gold CA", "5FD08B3E1E17EE23", RevokeStatus.REVOKATION_REASON_SUPERSEDED);
+        EJBCAWSClient.revokeUserCert("CN=ManagementCA,O=EJBCA Sample,C=SE", "4AB7F56FEF983DF1", RevokeStatus.REVOKATION_REASON_SUPERSEDED);
     }
 
 }

@@ -20,7 +20,7 @@ public class TestResources {
     
     
     public void testResource(){
-                InputStream  is =  Thread.currentThread().getContextClassLoader().getResourceAsStream("./KS/keystore.jks");//getClass().getResourceAsStream("/p12/trustore.jks");
+                InputStream  is =  Thread.currentThread().getContextClassLoader().getResourceAsStream("./KS/keystore.jks");
                 if (is == null)
                     System.out.println("Is null.....");
     }
