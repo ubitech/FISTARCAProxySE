@@ -9,7 +9,7 @@ import org.eclipse.jetty.server.Server;
 
 /**
  *
- * @author promitheas
+ * @author Chris Paraskeva - www.ubitech.eu
  */
 public enum ServerFactory {
 

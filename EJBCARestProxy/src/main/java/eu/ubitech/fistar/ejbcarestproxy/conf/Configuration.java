@@ -7,7 +7,7 @@ package eu.ubitech.fistar.ejbcarestproxy.conf;
 
 /**
  *
- * @author promitheas
+ * @author Chris Paraskeva - www.ubitech.eu
  */
 public class Configuration {
 

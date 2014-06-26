@@ -11,7 +11,7 @@ import org.ejbca.core.protocol.ws.client.gen.UserDataVOWS;
 
 /**
  *
- * @author promitheas
+ * @author Chris Paraskeva - www.ubitech.eu
  */
 public final class EjbcaUser {
 
@@ -23,6 +23,7 @@ public final class EjbcaUser {
         USERGENERATED, P12, JKS, PEM
     };
 
+    
     public enum Arguments {
 
         USERNAME,
@@ -41,7 +42,9 @@ public final class EjbcaUser {
         PKCS10,
         ENCODING,
         HARDTOKENSN,
-        OUTPUTPATH
+        OUTPUTPATH,
+        KEYLENGTH,
+        ENCRYPTION_ALGORYTHM
     };
 
     public EjbcaUser() {
@@ -58,6 +61,8 @@ public final class EjbcaUser {
         setEntityArgument(Arguments.CLEARPWD, "FALSE");
         setEntityArgument(Arguments.EMAIL, "NULL");
         setEntityArgument(Arguments.TOKEN,UserDataVOWS.TOKEN_TYPE_JKS); 
+        setEntityArgument(Arguments.KEYLENGTH,"2048"); 
+        setEntityArgument(Arguments.ENCRYPTION_ALGORYTHM,"RSA"); 
     }
 
     public void setEntityArgument(Enum key, String value) {

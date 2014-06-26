@@ -28,14 +28,11 @@ import org.ejbca.core.EjbcaException;
 import org.ejbca.core.model.ra.raadmin.EndEntityProfileNotFoundException;
 import org.ejbca.core.protocol.ws.client.gen.AlreadyRevokedException_Exception;
 import org.ejbca.core.protocol.ws.client.gen.ApprovalException_Exception;
-import org.ejbca.core.protocol.ws.client.gen.ApprovalRequestExpiredException_Exception;
 import org.ejbca.core.protocol.ws.client.gen.AuthorizationDeniedException_Exception;
 import org.ejbca.core.protocol.ws.client.gen.CADoesntExistsException_Exception;
-import org.ejbca.core.protocol.ws.client.gen.CAOfflineException_Exception;
 import org.ejbca.core.protocol.ws.client.gen.Certificate;
 import org.ejbca.core.protocol.ws.client.gen.CertificateResponse;
 import org.ejbca.core.protocol.ws.client.gen.CesecoreException_Exception;
-import org.ejbca.core.protocol.ws.client.gen.CryptoTokenOfflineException_Exception;
 import org.ejbca.core.protocol.ws.client.gen.DateNotValidException_Exception;
 import org.ejbca.core.protocol.ws.client.gen.EjbcaException_Exception;
 import org.ejbca.core.protocol.ws.client.gen.EjbcaWS;
@@ -48,11 +45,9 @@ import org.ejbca.core.protocol.ws.client.gen.NotFoundException_Exception;
 import org.ejbca.core.protocol.ws.client.gen.RevokeBackDateNotAllowedForProfileException_Exception;
 import org.ejbca.core.protocol.ws.client.gen.RevokeStatus;
 import org.ejbca.core.protocol.ws.client.gen.UserDataVOWS;
-import org.ejbca.core.protocol.ws.client.gen.UserDoesntFullfillEndEntityProfile_Exception;
 import org.ejbca.core.protocol.ws.client.gen.UserMatch;
 import org.ejbca.core.protocol.ws.client.gen.WaitingForApprovalException_Exception;
 import org.ejbca.ui.cli.ErrorAdminCommandException;
-import org.ejbca.ui.cli.IllegalAdminCommandException;
 import org.ejbca.util.query.IllegalQueryException;
 
 /**
@@ -80,48 +75,13 @@ public class EjbcaWSClientImpl {
      * @param ejbcaUser An EjbcaUser Object which contains all info for the user
      * to be edited/created
      * @return The generated KeyStore or null if no KeyStore could be created
-     * @throws org.ejbca.ui.cli.IllegalAdminCommandException
-     * @throws org.ejbca.ui.cli.ErrorAdminCommandException
+     *
      */
-    public KeyStore editUser(EjbcaUser ejbcaUser) throws IllegalAdminCommandException, ErrorAdminCommandException {
-        KeyStore keystore = null;
-        EjbcaUser user = new EjbcaUser();
-        user.setEntityArgument(EjbcaUser.Arguments.USERNAME, null);
-        EjbcaWSLogger wslogger = new EjbcaWSLogger();
-        final UserDataVOWS userdata = new UserDataVOWS();
-        final String username = ejbcaUser.getEntityArgument(EjbcaUser.Arguments.USERNAME);
-        final String password = ejbcaUser.getEntityArgument(EjbcaUser.Arguments.PASSWORD);
-        final String encoding = ejbcaUser.getEntityArgument(EjbcaUser.Arguments.ENCODING);
-        final String hardtokensn = ejbcaUser.getEntityArgument(EjbcaUser.Arguments.HARDTOKENSN);
-        final String outputPath = ejbcaUser.getEntityArgument(EjbcaUser.Arguments.OUTPUTPATH).length() > 0 ? ejbcaUser.getEntityArgument(EjbcaUser.Arguments.OUTPUTPATH) : null;
-
+    public boolean editUser(EjbcaUser ejbcaUser) {
         try {
-            userdata.setUsername(username);
-            userdata.setPassword(password);
-            userdata.setClearPwd(ejbcaUser.getEntityArgument(EjbcaUser.Arguments.CLEARPWD).equalsIgnoreCase("true"));
-            userdata.setSubjectDN(ejbcaUser.getEntityArgument(EjbcaUser.Arguments.SUBJECTDN));
+            EjbcaWSLogger wslogger = new EjbcaWSLogger();
+            final UserDataVOWS userdata = convertEjbcaUserTOUserDataVOWS(ejbcaUser);
 
-            if (!ejbcaUser.getEntityArgument(EjbcaUser.Arguments.HARDTOKENSN).equalsIgnoreCase("NULL")) {
-                userdata.setHardTokenIssuerName(ejbcaUser.getEntityArgument(EjbcaUser.Arguments.HARDTOKENSN));
-            }
-
-            if (!ejbcaUser.getEntityArgument(EjbcaUser.Arguments.SUBJECTALTNAME).equalsIgnoreCase("NULL")) {
-                userdata.setSubjectAltName(ejbcaUser.getEntityArgument(EjbcaUser.Arguments.SUBJECTALTNAME));
-            }
-
-            if (!ejbcaUser.getEntityArgument(EjbcaUser.Arguments.EMAIL).equalsIgnoreCase("NULL")) {
-                userdata.setEmail(ejbcaUser.getEntityArgument(EjbcaUser.Arguments.EMAIL));
-            }
-
-            userdata.setCaName(ejbcaUser.getEntityArgument(EjbcaUser.Arguments.CA));
-            userdata.setTokenType(ejbcaUser.getEntityArgument(EjbcaUser.Arguments.TOKEN));
-            userdata.setStatus(Integer.parseInt(ejbcaUser.getEntityArgument(EjbcaUser.Arguments.STATUS)));
-            userdata.setEndEntityProfileName(ejbcaUser.getEntityArgument(EjbcaUser.Arguments.ENDENTITYPROFILE));
-            userdata.setCertificateProfileName(ejbcaUser.getEntityArgument(EjbcaUser.Arguments.CERTIFICATEPROFILE));
-
-            if (!ejbcaUser.getEntityArgument(EjbcaUser.Arguments.ISSUERALIAS).equalsIgnoreCase("NONE")) {
-                userdata.setEmail(ejbcaUser.getEntityArgument(EjbcaUser.Arguments.ISSUERALIAS));
-            }
             wslogger.append("Trying to add user:");
             wslogger.append("Username: " + userdata.getUsername());
             wslogger.append("Subject DN: " + userdata.getSubjectDN());
@@ -133,51 +93,46 @@ public class EjbcaWSClientImpl {
             wslogger.append("End entity profile: " + userdata.getEndEntityProfileName());
             wslogger.append("Certificate profile: " + userdata.getCertificateProfileName());
             wslogger.append("Hard Token Issuer Alias: " + (userdata.getHardTokenIssuerName() != null ? userdata.getHardTokenIssuerName() : "NONE"));
-            {
-                final List<ExtendedInformationWS> eil = userdata.getExtendedInformation();
-                if (eil != null) {
-                    wslogger.append("Extended information:");
-                    for (ExtendedInformationWS ei : eil) {
-                        wslogger.append("	'" + ei.getName() + "' = '" + ei.getValue() + "'");
-                    }
-                }
-            }
-            {
-                final BigInteger bi = userdata.getCertificateSerialNumber();
-                if (bi != null) {
-                    wslogger.append("CERTIFICATESERIALNUMBER" + "=0x" + bi.toString(16));
+
+            final List<ExtendedInformationWS> eil = userdata.getExtendedInformation();
+            if (eil != null) {
+                wslogger.append("Extended information:");
+                for (ExtendedInformationWS ei : eil) {
+                    wslogger.append("	'" + ei.getName() + "' = '" + ei.getValue() + "'");
                 }
             }
 
-            try {
-                //Add/Edit End-Entity to EJBCA
-                getEjbcaRAWS().editUser(userdata);
-                wslogger.append("User '" + userdata.getUsername() + "' has been added/edited.");
-                keystore = getEjbcaRAWS().softTokenRequest(userdata, userdata.getHardTokenIssuerName(), "2048", "RSA");
-
-                if (keystore == null) {
-                    wslogger.append("No certificate could be generated for user, check server logs for error.");
-                }
-            } catch (AuthorizationDeniedException_Exception e) {
-                wslogger.append("Error : " + e.getMessage());
-            } catch (UserDoesntFullfillEndEntityProfile_Exception e) {
-                wslogger.append("Error : Given userdata doesn't fullfill end entity profile. : " + e.getMessage());
+            final BigInteger bi = userdata.getCertificateSerialNumber();
+            if (bi != null) {
+                wslogger.append("CERTIFICATESERIALNUMBER" + "=0x" + bi.toString(16));
             }
-        } catch (NumberFormatException e) {
-            throw new ErrorAdminCommandException(e);
-        } catch (ApprovalException_Exception e) {
-            throw new ErrorAdminCommandException(e);
-        } catch (CADoesntExistsException_Exception e) {
-            wslogger.append("No such CA: " + user.getEntityArgument(EjbcaUser.Arguments.CA));
-        } catch (EjbcaException_Exception e) {
-            e.printStackTrace();
-            wslogger.append("An unexpected exception occured to EJBCA...");
-        } catch (NotFoundException_Exception e) {
-            wslogger.append("No such command...");
-        } catch (WaitingForApprovalException_Exception e) {
-            wslogger.append("The current action needs approval. Contact the admin of EJBCA...");
+            //Add/Edit End-Entity to EJBCA
+            getEjbcaRAWS().editUser(userdata);
+            wslogger.append("User '" + userdata.getUsername() + "' has been added/edited.");
+            wslogger.showLogs(this.logger);
+            return true;
+
+        } catch (Exception ex) {
+            Logger.getLogger(EjbcaWSClientImpl.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
         }
-        wslogger.showLogs(this.logger);
+    }
+
+    public KeyStore createSoftTokenRequest(EjbcaUser ejbcaUser) {
+        KeyStore keystore = null;
+        try {
+            EjbcaWSLogger wslogger = new EjbcaWSLogger();
+            UserDataVOWS userdata = convertEjbcaUserTOUserDataVOWS(ejbcaUser);
+
+            keystore = getEjbcaRAWS().softTokenRequest(userdata, userdata.getHardTokenIssuerName(), ejbcaUser.getEntityArgument(EjbcaUser.Arguments.KEYLENGTH), ejbcaUser.getEntityArgument(EjbcaUser.Arguments.ENCRYPTION_ALGORYTHM));
+
+            if (keystore == null) {
+                wslogger.append("No certificate could be generated for user, check server logs for error.");
+            }
+
+        } catch (Exception ex) {
+            Logger.getLogger(EjbcaWSClientImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return keystore;
     }
 
@@ -276,7 +231,6 @@ public class EjbcaWSClientImpl {
      * <a href="http://en.wikipedia.org/wiki/ISO8601">ISO 8601 string</a>. An
      * example: 2012-06-07T23:55:59+02:00
      */
-    
     //TODO: Implement a return value solution
     public void revokeCertBackdated(String issuerDN, String certificateSN, int reason, String sDate) {
         EjbcaWSLogger wslogger = new EjbcaWSLogger();
@@ -338,7 +292,6 @@ public class EjbcaWSClientImpl {
      * @param certificateSN
      * @param reason
      */
-    
     //TODO: Implement a return value solution
     public void revokeUserCert(String issuerDN, String certificateSN, int reason) {
         revokeCertBackdated(issuerDN, certificateSN, reason, null);
@@ -363,23 +316,16 @@ public class EjbcaWSClientImpl {
      * @exception CAOfflineException
      * @exception CryptoTokenOfflineException
      */
-    public void createCRL(String caname) {
+    public boolean createCRL(String caname) {
         try {
             getEjbcaRAWS().createCRL(caname);
             logger.log(Level.INFO, "CRL for CA: {0} was created successfuly!", caname);
-        } catch (ApprovalException_Exception ex) {
+        } catch (Exception ex) {
             Logger.getLogger(EjbcaWSClientImpl.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ApprovalRequestExpiredException_Exception ex) {
-            Logger.getLogger(EjbcaWSClientImpl.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (CADoesntExistsException_Exception ex) {
-            Logger.getLogger(EjbcaWSClientImpl.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (CAOfflineException_Exception ex) {
-            Logger.getLogger(EjbcaWSClientImpl.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (CryptoTokenOfflineException_Exception ex) {
-            Logger.getLogger(EjbcaWSClientImpl.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (EjbcaException_Exception ex) {
-            Logger.getLogger(EjbcaWSClientImpl.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
         }
+
+        return true;
     }
 
     /**
@@ -501,6 +447,21 @@ public class EjbcaWSClientImpl {
 
     }
 
+    public List<Certificate> getCACert(String name) {
+        List<Certificate> certsList = null;
+        try {
+            certsList = getEjbcaRAWS().getLastCAChain(name);
+
+        } catch (AuthorizationDeniedException_Exception ex) {
+            Logger.getLogger(EjbcaWSClientImpl.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (CADoesntExistsException_Exception ex) {
+            Logger.getLogger(EjbcaWSClientImpl.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (EjbcaException_Exception ex) {
+            Logger.getLogger(EjbcaWSClientImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return certsList;
+    }
+
     /**
      * Fetches available certificate profiles in an end entity profile.
      *
@@ -607,7 +568,7 @@ public class EjbcaWSClientImpl {
         return isStoreSuccess;
     }
 
-        //Stores a CRL list to the filesystem
+    //Stores a CRL list to the filesystem
     public boolean storeX509Certificate(X509Certificate cert, String pathname, String filename) {
         boolean isStoreSuccess = false;
         if (cert != null) {
@@ -628,10 +589,42 @@ public class EjbcaWSClientImpl {
         }
         return isStoreSuccess;
     }
-    
-    
-    
-    
+
+    public UserDataVOWS convertEjbcaUserTOUserDataVOWS(EjbcaUser ejbcaUser) {
+        UserDataVOWS userdata = new UserDataVOWS();
+        final String encoding = ejbcaUser.getEntityArgument(EjbcaUser.Arguments.ENCODING);
+        final String hardtokensn = ejbcaUser.getEntityArgument(EjbcaUser.Arguments.HARDTOKENSN);
+        final String outputPath = ejbcaUser.getEntityArgument(EjbcaUser.Arguments.OUTPUTPATH).length() > 0 ? ejbcaUser.getEntityArgument(EjbcaUser.Arguments.OUTPUTPATH) : null;
+
+        userdata.setUsername(ejbcaUser.getEntityArgument(EjbcaUser.Arguments.USERNAME));
+        userdata.setPassword(ejbcaUser.getEntityArgument(EjbcaUser.Arguments.PASSWORD));
+        userdata.setClearPwd(ejbcaUser.getEntityArgument(EjbcaUser.Arguments.CLEARPWD).equalsIgnoreCase("true"));
+        userdata.setSubjectDN(ejbcaUser.getEntityArgument(EjbcaUser.Arguments.SUBJECTDN));
+
+        if (!ejbcaUser.getEntityArgument(EjbcaUser.Arguments.HARDTOKENSN).equalsIgnoreCase("NULL")) {
+            userdata.setHardTokenIssuerName(ejbcaUser.getEntityArgument(EjbcaUser.Arguments.HARDTOKENSN));
+        }
+
+        if (!ejbcaUser.getEntityArgument(EjbcaUser.Arguments.SUBJECTALTNAME).equalsIgnoreCase("NULL")) {
+            userdata.setSubjectAltName(ejbcaUser.getEntityArgument(EjbcaUser.Arguments.SUBJECTALTNAME));
+        }
+
+        if (!ejbcaUser.getEntityArgument(EjbcaUser.Arguments.EMAIL).equalsIgnoreCase("NULL")) {
+            userdata.setEmail(ejbcaUser.getEntityArgument(EjbcaUser.Arguments.EMAIL));
+        }
+
+        userdata.setCaName(ejbcaUser.getEntityArgument(EjbcaUser.Arguments.CA));
+        userdata.setTokenType(ejbcaUser.getEntityArgument(EjbcaUser.Arguments.TOKEN));
+        userdata.setStatus(Integer.parseInt(ejbcaUser.getEntityArgument(EjbcaUser.Arguments.STATUS)));
+        userdata.setEndEntityProfileName(ejbcaUser.getEntityArgument(EjbcaUser.Arguments.ENDENTITYPROFILE));
+        userdata.setCertificateProfileName(ejbcaUser.getEntityArgument(EjbcaUser.Arguments.CERTIFICATEPROFILE));
+
+        if (!ejbcaUser.getEntityArgument(EjbcaUser.Arguments.ISSUERALIAS).equalsIgnoreCase("NONE")) {
+            userdata.setEmail(ejbcaUser.getEntityArgument(EjbcaUser.Arguments.ISSUERALIAS));
+        }
+        return userdata;
+    }
+
     //Stroes a Certificate to the filesystem
     public boolean storeCertificate(Certificate certificate, String encoding, String pathname, String filename) {
         boolean isStoreSuccess = false;

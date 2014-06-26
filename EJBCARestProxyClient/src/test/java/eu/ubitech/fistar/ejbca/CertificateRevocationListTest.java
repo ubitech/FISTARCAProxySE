@@ -36,7 +36,7 @@ public class CertificateRevocationListTest
      * certificate)
      */
     public void testCreateCRL() {
-        EJBCAWSClient.createCRL("FISTARManagementCA");
+        assertTrue(EJBCAWSClient.createCRL("FISTARManagementCA"));
     }
 
         public void testGetLatestCRL() {

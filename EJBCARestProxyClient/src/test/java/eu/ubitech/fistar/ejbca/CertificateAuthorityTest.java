@@ -4,7 +4,6 @@ import eu.ubitech.fistar.ejbca.proxy.client.EjbcaWSClientImpl;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-import org.ejbca.core.protocol.ws.client.gen.NameAndId;
 
 /**
  * Unit test for Certificate Authority SOAP operations.

@@ -5,20 +5,16 @@
  */
 package eu.ubitech.fistar.ejbca.proxy.client;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.security.KeyStore;
-import java.security.Security;
 import java.util.Properties;
+import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 import javax.xml.namespace.QName;
 import org.cesecore.util.CryptoProviderTools;
@@ -28,7 +24,7 @@ import org.ejbca.core.protocol.ws.client.gen.RevokeStatus;
 
 /**
  *
- * @author promitheas
+ * @author Chris Paraskeva - www.ubitech.eu
  */
 public enum EjbcaWSClient {
 
@@ -155,8 +151,13 @@ public enum EjbcaWSClient {
      * @throws IOException
      * @throws FileNotFoundException
      */
-    public EjbcaWS getEjbcaRAWS() throws Exception {
-        return getEjbcaRAWS(false);
+    public EjbcaWS getEjbcaRAWS()  {
+        try {
+            return getEjbcaRAWS(false);
+        } catch (Exception ex) {
+            Logger.getLogger(EjbcaWSClient.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
     /**

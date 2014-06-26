@@ -8,7 +8,6 @@ package eu.ubitech.fistar.ejbcarestproxy.controller;
 import com.sun.jersey.spi.container.servlet.ServletContainer;
 import eu.ubitech.fistar.ejbcarestproxy.conf.Configuration;
 import eu.ubitech.fistar.ejbcarestproxy.server.ServerFactory;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -24,7 +23,7 @@ import org.eclipse.jetty.servlet.ServletHolder;
 
 /**
  *
- * @author promitheas
+ * @author Chris Paraskeva - www.ubitech.eu
  */
 public class EJBCAProxyController {
 
@@ -46,7 +45,8 @@ public class EJBCAProxyController {
         try {
             String path = new java.io.File(".").getCanonicalPath();
             LOGGER.log(Level.INFO, "PATH:{0}", path);
-            input = new FileInputStream("jetty.properties");
+           // input = new FileInputStream("jetty.properties");
+           input = Thread.currentThread().getContextClassLoader().getResourceAsStream("jetty.properties");
             // load a properties file
             prop.load(input);
             // get the property value and print it out
@@ -81,7 +81,7 @@ public class EJBCAProxyController {
             /* ServletHandler handler = new ServletHandler();
              handler.addServletWithMapping(HelloServlet.class, "/hello");//Set the servlet to run.*/
             ServletContextHandler context = new ServletContextHandler(server, "/", ServletContextHandler.SESSIONS);
-            context.addServlet(sh, "/ejbcaproxy/rest/*");
+            context.addServlet(sh, "/rest/ejbca/*");
             //server.setHandler(handler);
             //manage thread
             server.start();
