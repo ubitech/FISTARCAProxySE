@@ -48,7 +48,7 @@ public class CertificateAuthorityTest
         assertFalse(EJBCAWSClient.getAvailableCertificateProfiles(916351690).isEmpty());
     }
 
-    /*Get all authorized end-entities profiles for the current issuing CA */
+    /*Get all authorized end-entities profiles for the current issuing CA*/
     public void testGetAuthorizedEndEntityProfiles() {
         assertFalse(EJBCAWSClient.getAuthorizedEndEntityProfiles().isEmpty());
 

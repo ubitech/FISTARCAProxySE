@@ -29,11 +29,6 @@ public class EjbcaServiceCA {
     @Produces(MediaType.TEXT_HTML)
     /**
      * Fetch all the available Certificate Authorities.
-     *
-     * @param certSNinHex the certificate serial number in hexadecimal
-     * representation
-     * @param issuerDN the issuer of the certificate
-     *
      */
     public Response getAvailableCAs() {
         String output = "";
@@ -41,7 +36,7 @@ public class EjbcaServiceCA {
         for (NameAndId nid : nidList) {
             output += "Name: " + nid.getName() + " Id: " + nid.getId() + "\n";
         }
-        return Response.status(200).entity(output).build();
+        return Response.status(RESTfulServiceStatus.OK).entity(output).build();
     }
 
     @GET
@@ -58,11 +53,10 @@ public class EjbcaServiceCA {
         String output = name;
         List<Certificate> certsList = ejbcaWSclient.getCACert(name);
         if (certsList == null) {
-            return Response.status(200).entity("No such CA as : " + name).build();
+            return Response.status(RESTfulServiceStatus.BAD_REQUEST).entity("No such CA as : " + name).build();
         }
-        return Response.status(200).entity(certsList.get(0).getRawCertificateData()).header("content-disposition", "attachment; filename = " + name + ".DER").build();
+        return Response.status(RESTfulServiceStatus.OK).entity(certsList.get(0).getRawCertificateData()).header("content-disposition", "attachment; filename = " + name + ".der").build();
     }
-
 
 }
 //@QueryParam(value = "certSN") final String certSN,
