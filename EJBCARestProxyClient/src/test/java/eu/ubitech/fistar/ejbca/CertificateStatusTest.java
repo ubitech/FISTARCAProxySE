@@ -32,14 +32,18 @@ public class CertificateStatusTest
 
     /**
      * Check the status of a certificate (returns a revoked reason of the
-     * certificate)
+     * certificate).
      */
     public void testCheckCertificateStatus() {
         assert (EJBCAWSClient.checkCertificateRevokeStatus("CN=ManagementCA,O=EJBCA Sample,C=SE", "4AB7F56FEF983DF1").getReason() == RevokeStatus.REVOKATION_REASON_SUPERSEDED);
     }
 
+    /**
+     * Revoke user's certificate.
+     * 
+     */
     public void testRevokeUserCert() {
-        EJBCAWSClient.revokeUserCert("CN=ManagementCA,O=EJBCA Sample,C=SE", "4AB7F56FEF983DF1", RevokeStatus.REVOKATION_REASON_SUPERSEDED);
+        assertFalse(EJBCAWSClient.revokeUserCert("CN=ManagementCA,O=EJBCA Sample,C=SE", "4AB7F56FEF983DF1", RevokeStatus.REVOKATION_REASON_SUPERSEDED));
     }
 
 }

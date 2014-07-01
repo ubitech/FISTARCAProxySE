@@ -111,4 +111,3 @@ public class EjbcaServiceCRL {
     }
 
 }
-//@QueryParam(value = "certSN") final String certSN,

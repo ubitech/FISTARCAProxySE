@@ -42,14 +42,17 @@ public class EndEntityTest
     }
 
     /**
-     * Check the status of a certificate (returns a revoked reason of the
-     * certificate)
+     * Create a new end-entity(user) to EJBCA Database.
      */
     public void testAddEndEntity() {
         boolean status = EJBCAWSClient.editUser(this.getEJBCADummyUser());
         assertTrue(status);
     }
 
+    /**
+     * Fetch all the end-entities stored to EJBCA database for the given
+     * Certificate Authority.
+     */
     public void testFindEndEntity() {
         UserMatch usermatch = new UserMatch(UserMatch.MATCH_WITH_CA, UserMatch.MATCH_TYPE_EQUALS, "FISTARManagementCA");
         assert (EJBCAWSClient.findUser(usermatch).size() > 0);
@@ -84,6 +87,7 @@ public class EndEntityTest
         assertNotNull(certificateResponse);
     }
 
+    //Help function - return a dummy ejbca user object
     private EjbcaUser getEJBCADummyUser() {
         EjbcaUser ejbcaUser = new EjbcaUser();
         ejbcaUser.setEntityArgument(EjbcaUser.Arguments.USERNAME, "testEjbcaUser2");

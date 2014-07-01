@@ -188,7 +188,7 @@ public enum EjbcaWSClient {
         return this.ejbcaraws;
     }
 
-    public int getRevokeReason(String reason) throws Exception {
+    public int getRevokeReason(String reason)  {
         for (int i = 0; i < REASON_TEXTS.length; i++) {
             if (REASON_TEXTS[i].equalsIgnoreCase(reason)) {
                 return REASON_VALUES[i];

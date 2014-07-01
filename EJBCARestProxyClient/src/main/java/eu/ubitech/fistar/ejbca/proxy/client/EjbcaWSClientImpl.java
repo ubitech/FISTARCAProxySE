@@ -78,10 +78,9 @@ public class EjbcaWSClientImpl {
      *
      */
     public boolean editUser(EjbcaUser ejbcaUser) {
+        EjbcaWSLogger wslogger = new EjbcaWSLogger();
         try {
-            EjbcaWSLogger wslogger = new EjbcaWSLogger();
             final UserDataVOWS userdata = convertEjbcaUserTOUserDataVOWS(ejbcaUser);
-
             wslogger.append("Trying to add user:");
             wslogger.append("Username: " + userdata.getUsername());
             wslogger.append("Subject DN: " + userdata.getSubjectDN());
@@ -92,7 +91,7 @@ public class EjbcaWSClientImpl {
             wslogger.append("Status: " + getStatus(userdata.getStatus()));
             wslogger.append("End entity profile: " + userdata.getEndEntityProfileName());
             wslogger.append("Certificate profile: " + userdata.getCertificateProfileName());
-            wslogger.append("Hard Token Issuer Alias: " + (userdata.getHardTokenIssuerName() != null ? userdata.getHardTokenIssuerName() : "NONE"));
+            wslogger.append("Hard Token Issuer Alias: " + (userdata.getHardTokenIssuerName() != null ? userdata.getHardTokenIssuerName() : "null"));
 
             final List<ExtendedInformationWS> eil = userdata.getExtendedInformation();
             if (eil != null) {
@@ -114,8 +113,9 @@ public class EjbcaWSClientImpl {
 
         } catch (Exception ex) {
             Logger.getLogger(EjbcaWSClientImpl.class.getName()).log(Level.SEVERE, null, ex);
-            return false;
         }
+        wslogger.showLogs(this.logger);
+        return false;
     }
 
     public KeyStore createSoftTokenRequest(EjbcaUser ejbcaUser) {
@@ -232,7 +232,8 @@ public class EjbcaWSClientImpl {
      * example: 2012-06-07T23:55:59+02:00
      */
     //TODO: Implement a return value solution
-    public void revokeCertBackdated(String issuerDN, String certificateSN, int reason, String sDate) {
+    public boolean revokeCertBackdated(String issuerDN, String certificateSN, int reason, String sDate) {
+        boolean isRevoked = false;
         EjbcaWSLogger wslogger = new EjbcaWSLogger();
         try {
             final String issuerdn = CertTools.stringToBCDNString(issuerDN);
@@ -243,6 +244,7 @@ public class EjbcaWSClientImpl {
                 if (status != null) {
                     getEjbcaRAWS().revokeCertBackdated(issuerdn, certsn, reason, sDate);
                     wslogger.append("Certificate revoked (or unrevoked) successfully.");
+                    isRevoked = true;
                 } else {
                     wslogger.append("Certificate does not exist.");
                 }
@@ -282,6 +284,7 @@ public class EjbcaWSClientImpl {
         }
 
         wslogger.showLogs(this.logger);
+        return isRevoked;
     }
 
     /**
@@ -293,8 +296,8 @@ public class EjbcaWSClientImpl {
      * @param reason
      */
     //TODO: Implement a return value solution
-    public void revokeUserCert(String issuerDN, String certificateSN, int reason) {
-        revokeCertBackdated(issuerDN, certificateSN, reason, null);
+    public boolean revokeUserCert(String issuerDN, String certificateSN, int reason) {
+        return revokeCertBackdated(issuerDN, certificateSN, reason, null);
 
     }
 
