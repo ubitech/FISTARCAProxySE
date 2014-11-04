@@ -13,6 +13,7 @@
         <module>EJBCARestProxyClient</module>
         <module>EJBCARestProxy</module>
         <module>EJBCARestClient/EJBCARestClient</module>
+    <module>WebServiceProvider</module>
   </modules>
                         
     <properties>
