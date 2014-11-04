@@ -12,7 +12,8 @@
     <modules>   
         <module>EJBCARestProxyClient</module>
         <module>EJBCARestProxy</module>
-    </modules>
+        <module>EJBCARestClient/EJBCARestClient</module>
+  </modules>
                         
     <properties>
         <project.source.charset>UTF-8</project.source.charset>

@@ -6,7 +6,6 @@
 package eu.ubitech.fistar.ejbcarestproxy.services;
 
 import eu.ubitech.fistar.ejbca.proxy.client.EjbcaUser;
-import eu.ubitech.fistar.ejbca.proxy.client.EjbcaWSClient;
 import eu.ubitech.fistar.ejbca.proxy.client.EjbcaWSClientImpl;
 import java.util.List;
 import javax.ws.rs.GET;
@@ -20,8 +19,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import org.ejbca.core.protocol.ws.client.gen.Certificate;
 import org.ejbca.core.protocol.ws.client.gen.KeyStore;
-import org.ejbca.core.protocol.ws.client.gen.NameAndId;
-import org.ejbca.core.protocol.ws.client.gen.RevokeStatus;
 import org.ejbca.core.protocol.ws.client.gen.UserDataVOWS;
 import org.ejbca.core.protocol.ws.client.gen.UserMatch;
 
@@ -90,12 +87,14 @@ public class EjbcaServiceUSERCERTIFICATE {
             ejbcaUser.setEntityArgument(EjbcaUser.Arguments.EMAIL, user.getEmail());
         }
 
-        ejbcaUser.setEntityArgument(EjbcaUser.Arguments.TOKEN, UserDataVOWS.TOKEN_TYPE_USERGENERATED);
+        ejbcaUser.setEntityArgument(EjbcaUser.Arguments.TOKEN, user.getTokenType());
 
         KeyStore keystore = ejbcaWSclient.createSoftTokenRequest(ejbcaUser);
 
         if (keystore != null) {
-            return Response.status(RESTfulServiceStatus.OK).entity("Certificate is created!").build();
+            // return Response.status(RESTfulServiceStatus.OK).entity("Certificate is created!").build();
+            return Response.status(RESTfulServiceStatus.OK).entity(keystore.getRawKeystoreData()).header("content-disposition", "attachment; filename=certificate" + user.getTokenType()).build();
+
         }
 
         return Response.status(RESTfulServiceStatus.BAD_REQUEST).entity("Could not create certificate ....").build();
@@ -130,8 +129,8 @@ public class EjbcaServiceUSERCERTIFICATE {
             ejbcaUser.setEntityArgument(EjbcaUser.Arguments.EMAIL, user.getEmail());
         }
 
-        ejbcaUser.setEntityArgument(EjbcaUser.Arguments.TOKEN, UserDataVOWS.TOKEN_TYPE_USERGENERATED);
-
+        // ejbcaUser.setEntityArgument(EjbcaUser.Arguments.TOKEN, UserDataVOWS.TOKEN_TYPE_USERGENERATED);
+        ejbcaUser.setEntityArgument(EjbcaUser.Arguments.TOKEN, user.getTokenType());
         KeyStore keystore = ejbcaWSclient.createSoftTokenRequest(ejbcaUser);
 
         if (keystore != null) {

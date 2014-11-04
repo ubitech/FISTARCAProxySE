@@ -1,4 +1,3 @@
-
 import eu.ubitech.fistar.ejbca.proxy.client.EjbcaUser;
 import eu.ubitech.fistar.ejbca.proxy.client.EjbcaWSClientImpl;
 import java.io.BufferedReader;
@@ -34,11 +33,11 @@ public class EJBCAWebServiceTester {
     public static void main(String[] args) {
         if (invoke()) {
             System.out.println("EJBCA is running and invocation was success....");
-            testGetCACert();
+            //testGetCACert();
             //System.out.println("Test1: CheckRevokationStatus");
             //testCheckRevokationStatus();
-            // System.out.println("Test2: AddNewUser");
-            //testAddNewUser();
+            System.out.println("Test2: AddNewUser");
+            testAddNewUser();
             //testAddNewUser2();
             //System.out.println("Test3: RevokeUserCert");
             //testRevokeUserCert();
@@ -137,16 +136,16 @@ public class EJBCAWebServiceTester {
 
     private static void testAddNewUser() {
         EjbcaUser ejbcaUser = new EjbcaUser();
-        ejbcaUser.setEntityArgument(EjbcaUser.Arguments.USERNAME, "test");
+        ejbcaUser.setEntityArgument(EjbcaUser.Arguments.USERNAME, "fistarJAVA");
         ejbcaUser.setEntityArgument(EjbcaUser.Arguments.PASSWORD, "test");
-        ejbcaUser.setEntityArgument(EjbcaUser.Arguments.CA, "CIEC Sign Gold CA");
-        ejbcaUser.setEntityArgument(EjbcaUser.Arguments.SUBJECTDN, "CN=testa user3aa");
-        ejbcaUser.setEntityArgument(EjbcaUser.Arguments.ENDENTITYPROFILE, "CIEC officer");
-        ejbcaUser.setEntityArgument(EjbcaUser.Arguments.CERTIFICATEPROFILE, "CIEC user");
+        ejbcaUser.setEntityArgument(EjbcaUser.Arguments.CA, "FISTARManagementCA");
+        ejbcaUser.setEntityArgument(EjbcaUser.Arguments.SUBJECTDN, "CN=fistarJAVA");
+        ejbcaUser.setEntityArgument(EjbcaUser.Arguments.ENDENTITYPROFILE, "FISTARUser");
+        ejbcaUser.setEntityArgument(EjbcaUser.Arguments.CERTIFICATEPROFILE, "ENDUSER");
         ejbcaUser.setEntityArgument(EjbcaUser.Arguments.EMAIL, "test@testemail.com");
-        ejbcaUser.setEntityArgument(EjbcaUser.Arguments.TOKEN, UserDataVOWS.TOKEN_TYPE_USERGENERATED);
+        ejbcaUser.setEntityArgument(EjbcaUser.Arguments.TOKEN, "P12");
         boolean status = EJBCAWSClient.editUser(ejbcaUser);
-        //EJBCAWSClient.storeKeystore(EJBCAWSClient.createSoftTokenRequest(ejbcaUser), "P12", "binary", "/home/promitheas/Downloads", "mykeystore");
+       // EJBCAWSClient.storeKeystore(EJBCAWSClient.createSoftTokenRequest(ejbcaUser), "P12", "binary", "/home/ermis/Downloads/certs", "dummycert1");
 
     }
 

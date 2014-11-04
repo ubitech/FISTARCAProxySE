@@ -60,32 +60,16 @@
     
     
       
-      <!-- Inlcude added dependencies (jar files) -->
+    <!-- Inlcude added dependencies (jar files) -->
     <build>
         <plugins>         
             
-<!--    <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-jar-plugin</artifactId>
-         <version>2.4</version>
-        <configuration>
-                   <includes>  
-                        <include>../*.jar</include>  
-                    </includes>  
 
-            <archive>
-                <manifest>
-                    <mainClass>com.mycompany.lucene.App</mainClass>
-                </manifest>
-            </archive>
-        </configuration>
-    </plugin> -->
-           
             
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>2.1</version>
+                <version>2.3</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -96,23 +80,25 @@
                 </executions>
                 <configuration>
                     
-<!--The above configuration filters all files in META-INF ending with .SF, .DSA, and .RSA 
- for all artifacts (*:*) when creating uber-jar file. -->  
+                    <!--The above configuration filters all files in META-INF ending with .SF, .DSA, and .RSA 
+                    for all artifacts (*:*) when creating uber-jar file. -->  
                     <filters>    
                         <filter>
-                          <artifact>*:*</artifact>
-                          <excludes>
-                            <exclude>META-INF/*.SF</exclude>
-                            <exclude>META-INF/*.DSA</exclude>
-                            <exclude>META-INF/*.RSA</exclude>
-                          </excludes>
+                            <artifact>*:*</artifact>
+                            <excludes>
+                                <exclude>META-INF/*.SF</exclude>
+                                <exclude>META-INF/*.DSA</exclude>
+                                <exclude>META-INF/*.RSA</exclude>
+                            </excludes>
                         </filter>
-                      </filters>
+                    </filters>
                     <transformers>
-                    <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                      <mainClass>eu.ubitech.fistar.ejbcarestproxy.controller.EJBCAProxyController</mainClass>
-                    </transformer>
-              </transformers>
+                        <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                            <mainClass>eu.ubitech.fistar.ejbcarestproxy.controller.EJBCAProxyController</mainClass>
+                        </transformer>
+                        <transformer
+                            implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
+                    </transformers>
                     <finalName>uber-${project.artifactId}-${project.version}</finalName>
                 </configuration>
             </plugin>
