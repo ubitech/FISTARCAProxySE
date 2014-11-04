@@ -73,7 +73,7 @@ public class RESTClientService {
     }
 
     public static void main(String[] args) {
-        RESTClientProvider restClientProvider = new RESTClientProvider("http://192.168.1.203:9090/rest/ejbca");
+        RESTClientProvider restClientProvider = new RESTClientProvider("http://localhost:9090/rest/ejbca");
         RESTClientService restClientService = new RESTClientService(restClientProvider);
         //Failr
         if (restClientService.createEndEntity("fistarREST", "password", "FISTARManagementCA", "CN=fistarREST", "FISTARUser", "ENDUSER", "test@test", "P12", "", "") == false) {
