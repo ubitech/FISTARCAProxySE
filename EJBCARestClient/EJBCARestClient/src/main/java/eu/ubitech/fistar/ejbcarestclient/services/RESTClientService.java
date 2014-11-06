@@ -58,11 +58,11 @@ public class RESTClientService {
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
         params.add("password", password);
         ClientResponse response = restClientProvider.getRestService().path("user_certificate").path(username).queryParams(params).accept(MediaType.TEXT_HTML).post(ClientResponse.class);
-    
+
         try {
             //Util.storeKeystore(response.getEntity(String.class).getBytes(), "JKS", "binary", "/home/ermis/Downloads/", "iCert");
             //System.out.println(response.getEntity(ByteArrayProvider.class));
-            Util.writeTOdisk("/home/ermis/Downloads/certs/"+username+".P12", IOUtils.toByteArray(response.getEntityInputStream()));
+            Util.writeTOdisk("/home/ermis/Downloads/certs/" + username + ".P12", IOUtils.toByteArray(response.getEntityInputStream()));
         } catch (IOException ex) {
             Logger.getLogger(RESTClientService.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -73,18 +73,17 @@ public class RESTClientService {
     }
 
     public static void main(String[] args) {
-        RESTClientProvider restClientProvider = new RESTClientProvider("http://localhost:9090/rest/ejbca");
+        //RESTClientProvider restClientProvider = new RESTClientProvider("http://localhost:9090/rest/ejbca");
+        RESTClientProvider restClientProvider = new RESTClientProvider("http://193.175.132.251:8089/rest/ejbca");
+
         RESTClientService restClientService = new RESTClientService(restClientProvider);
-        //Failr
+        //Fail
         if (restClientService.createEndEntity("fistarREST", "password", "FISTARManagementCA", "CN=fistarREST", "FISTARUser", "ENDUSER", "test@test", "P12", "", "") == false) {
 
         } else //Success
         {
             restClientService.createUserCertificate("fistarREST", "password");
         }
-
-        // System.out.println(service.path("info").accept(MediaType.TEXT_HTML).get(String.class));
-        //System.out.println(service.path("endentity").path(username).queryParams(params).accept(MediaType.TEXT_HTML).post(String.class, "contentaaa"));
     }
 
 }
