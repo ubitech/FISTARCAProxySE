@@ -4,3 +4,5 @@ dist
 *.log
 /EJCARestClient/nbproject/private/
 nb-configuration.xml
+jetty.properties
+ejbcawsra.properties

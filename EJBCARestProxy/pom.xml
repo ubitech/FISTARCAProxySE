@@ -5,7 +5,7 @@
     <parent>
         <groupId>eu.ubitech.fistar</groupId>
         <artifactId>ejbcarestproxy-parent</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
     <groupId>eu.ubitech.fistar</groupId>
     <artifactId>EJBCARestProxy</artifactId>
@@ -51,7 +51,6 @@
             <type>jar</type>
         </dependency>
         
-        
         <dependency>
             <groupId>eu.ubitech.fistar.ejbcarestproxy</groupId>
             <artifactId>EJBCARestProxyClient</artifactId>
@@ -67,10 +66,7 @@
       
     <!-- Inlcude added dependencies (jar files) -->
     <build>
-        <plugins>         
-            
-
-            
+        <plugins>                    
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
