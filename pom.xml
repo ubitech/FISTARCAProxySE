@@ -12,7 +12,7 @@
     <modules>   
         <module>EJBCARestProxyClient</module>
         <module>EJBCARestProxy</module>
-        <module>EJBCARestClient/EJBCARestClient</module>
+        <module>EJBCARestClient</module>
   </modules>
                         
     <properties>
