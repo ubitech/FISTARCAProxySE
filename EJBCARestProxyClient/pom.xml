@@ -15,6 +15,8 @@
         <project.source.encoding>UTF-8</project.source.encoding>
         <java.version.source>1.7</java.version.source>
         <java.version.target>1.7</java.version.target>
+        <maven.compiler.source>1.7</maven.compiler.source>
+        <maven.compiler.target>1.7</maven.compiler.target>
     </properties>  
 
     <dependencies>

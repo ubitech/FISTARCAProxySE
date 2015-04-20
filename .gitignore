@@ -3,3 +3,4 @@ target
 dist
 *.log
 /EJCARestClient/nbproject/private/
+nb-configuration.xml
