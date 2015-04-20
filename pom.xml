@@ -5,7 +5,7 @@
     <groupId>eu.ubitech.fistar</groupId>
     <artifactId>ejbcarestproxy-parent</artifactId>
     <packaging>pom</packaging>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     <name>EJBCARestProxyParent</name>
     <description>EJBCARestProxy Modules</description>
   
@@ -13,8 +13,9 @@
         <module>EJBCARestProxyClient</module>
         <module>EJBCARestProxy</module>
         <module>EJBCARestClient</module>
-  </modules>
-                        
+    </modules>
+
+    <!-- Maven properties -->                                            
     <properties>
         <project.source.charset>UTF-8</project.source.charset>
         <project.source.encoding>UTF-8</project.source.encoding>
@@ -26,8 +27,6 @@
     
     <build>	        
         <plugins>	  
-
-	  
             <!-- Test plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
