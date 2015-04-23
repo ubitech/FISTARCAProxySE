@@ -78,10 +78,11 @@ public class EJBCAProxyController {
             } else {
                 server = ServerFactory.INSTANCE.getJettyServer();
             }
-            /* ServletHandler handler = new ServletHandler();
-             handler.addServletWithMapping(HelloServlet.class, "/hello");//Set the servlet to run.*/
+//             ServletHandler handler = new ServletHandler();
+//             handler.addServletWithMapping(HelloServlet.class, "/hello");//Set the servlet to run.
             ServletContextHandler context = new ServletContextHandler(server, "/", ServletContextHandler.SESSIONS);
             context.addServlet(sh, "/rest/ejbca/*");
+            context.addServlet(HelloServlet.class, "/");
             //server.setHandler(handler);
             //manage thread
             server.start();
@@ -106,7 +107,9 @@ public class EJBCAProxyController {
         protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
             response.setContentType("text/html");
             response.setStatus(HttpServletResponse.SC_OK);
-            response.getWriter().println("<h1>Hello SimpleServlet</h1>");
+            response.getWriter().println("<h1>iCert Module</h1><hr>");
+            response.getWriter().println("<br><br><p>Please refer to iCert REST API documentation for the supported operations...</p>");
+            
         }
     }
 

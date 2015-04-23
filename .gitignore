@@ -6,3 +6,4 @@ dist
 nb-configuration.xml
 jetty.properties
 ejbcawsra.properties
+*.properties
