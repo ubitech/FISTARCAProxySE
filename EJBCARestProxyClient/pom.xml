@@ -34,7 +34,38 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- EJBCA Local Dependencies -->           
+
+        <dependency>
+            <groupId>org.ejbca.cesecore</groupId>
+            <artifactId>cesecore-common</artifactId>
+            <version>7.0.0.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.ejbca.cesecore</groupId>
+            <artifactId>cesecore-entity</artifactId>
+            <version>7.0.0.1</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.ejbca.cesecore</groupId>
+            <artifactId>cesecore-interfaces</artifactId>
+            <version>7.0.0.1</version>
+        </dependency>        
+        
+        <dependency>
+            <groupId>org.ejbca.cesecore</groupId>
+            <artifactId>cesecore-ejb</artifactId>
+            <version>7.0.0.1</version>
+        </dependency>        
+        
+        <dependency>
+            <groupId>org.ejbca.cesecore</groupId>
+            <artifactId>cesecore</artifactId>
+            <version>7.0.0.1</version>
+        </dependency>        
+
+        <!-- EJBCA Local Dependencies          
         <dependency>
             <groupId>org.ejbca.core</groupId>
             <artifactId>ws-cli</artifactId>
@@ -77,7 +108,7 @@
             <version>1.0.0</version>
         </dependency>
             
-            
+ -->             
                    
                 
            

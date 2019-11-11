@@ -22,6 +22,7 @@ import org.ejbca.core.protocol.ws.client.gen.EjbcaWS;
 import org.ejbca.core.protocol.ws.client.gen.EjbcaWSService;
 import org.ejbca.core.protocol.ws.client.gen.RevokeStatus;
 
+
 /**
  *
  * @author Chris Paraskeva - www.ubitech.eu
